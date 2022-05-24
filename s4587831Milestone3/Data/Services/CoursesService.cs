@@ -72,5 +72,41 @@ namespace LearningZone0.Data.Services
 
             return response;
         }
+
+        public async Task UpdateCourseAsync(NewCourseVM data)
+        {
+            var dbCourse = await _context.Courses.FirstOrDefaultAsync(n => n.Id == data.Id);
+
+            if (dbCourse != null)
+            {
+                dbCourse.Name = data.Name;
+                dbCourse.Description = data.Description;
+                dbCourse.Price = data.Price;
+                dbCourse.ImageURL = data.ImageURL;
+                dbCourse.DifficultyId = data.DifficultyId;
+                dbCourse.StartDate = data.StartDate;
+                dbCourse.EndDate = data.EndDate;
+                dbCourse.CourseSubject = data.CourseSubject;
+                dbCourse.ConvenorId = data.ConvenorId;
+                await _context.SaveChangesAsync();
+            }
+
+            //Remove existing teachers
+            var existingTeachersDb = _context.Teachers_Courses.Where(n => n.CourseId == data.Id).ToList();
+            _context.Teachers_Courses.RemoveRange(existingTeachersDb);
+            await _context.SaveChangesAsync();
+
+            //Add Course Teachers
+            foreach (var teacherId in data.TeacherIds)
+            {
+                var newTeacherCourse = new Teacher_Course()
+                {
+                    CourseId = data.Id,
+                    TeacherId = teacherId
+                };
+                await _context.Teachers_Courses.AddAsync(newTeacherCourse);
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }

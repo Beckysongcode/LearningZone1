@@ -14,5 +14,6 @@ namespace LearningZone0.Data.Services
         Task<Course> GetCourseByIdAsync(int id);
         Task<NewCourseDropdownsVM> GetNewCourseDropdownsValues();
         Task AddNewCourseAsync(NewCourseVM data);
+        Task UpdateCourseAsync(NewCourseVM data);
     }
 }
