@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using s4587831Milestone3.Data;
+using s4587831Milestone3.Data.Cart;
 using s4587831Milestone3.Data.Services;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,11 @@ namespace s4587831Milestone3
             services.AddScoped<IDifficultiesService, DifficultiesService>();
             services.AddScoped<ICoursesService, CoursesService>();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
+
+            services.AddSession();
+
             services.AddControllersWithViews();
         }
 
@@ -57,6 +63,7 @@ namespace s4587831Milestone3
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

@@ -12,7 +12,7 @@ using s4587831Milestone3.Data;
 namespace s4587831Milestone3.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220525022155_Initial")]
+    [Migration("20220525025915_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,6 +172,31 @@ namespace s4587831Milestone3.Migrations
                     b.ToTable("OrderItems");
                 });
 
+            modelBuilder.Entity("s4587831Milestone3.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShoppingCartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
             modelBuilder.Entity("s4587831Milestone3.Models.Teacher", b =>
                 {
                     b.Property<int>("Id")
@@ -249,6 +274,17 @@ namespace s4587831Milestone3.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("s4587831Milestone3.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("s4587831Milestone3.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("s4587831Milestone3.Models.Teacher_Course", b =>
