@@ -37,6 +37,7 @@ namespace s4587831Milestone3
             services.AddScoped<IConvenorsService, ConvenorsService>();
             services.AddScoped<IDifficultiesService, DifficultiesService>();
             services.AddScoped<ICoursesService, CoursesService>();
+            services.AddScoped<IOrdersService, OrdersService>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
