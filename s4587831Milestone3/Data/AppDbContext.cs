@@ -32,5 +32,9 @@ namespace s4587831Milestone3.Data
         public DbSet<Teacher_Course> Teachers_Courses { get; set; }
         public DbSet<Difficulty> Difficulties { get; set; }
         public DbSet<Convenor> Convenors { get; set; }
+
+        //Orders related tables
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }
