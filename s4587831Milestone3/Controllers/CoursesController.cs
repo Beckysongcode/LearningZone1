@@ -1,9 +1,11 @@
 ﻿using LearningZone0.Data.Services;
 using LearningZone0.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using s4587831Milestone3.Data;
+using s4587831Milestone3.Data.Static;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace s4587831Milestone3.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class CoursesController : Controller
     {
         private readonly ICoursesService _service;
@@ -20,20 +23,21 @@ namespace s4587831Milestone3.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var allCourses = await _service.GetAllAsync(n => n.Difficulty);
             return View(allCourses);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Filter(string searchString)
         {
             var allCourses = await _service.GetAllAsync(n => n.Difficulty);
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                var filteredResult = allCourses.Where(n => n.Name.Contains(searchString) || n.Description.Contains
-                  (searchString)).ToList();
+                var filteredResult = allCourses.Where(n => n.Name.ToLower().Contains(searchString.ToLower()) || n.Description.ToLower().Contains(searchString.ToLower())).ToList();
                 return View("Index", filteredResult);
             }
 
@@ -41,6 +45,7 @@ namespace s4587831Milestone3.Controllers
         }
 
         //GET: Courses/Details/1
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var courseDetail = await _service.GetCourseByIdAsync(id);

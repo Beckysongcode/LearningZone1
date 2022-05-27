@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using s4587831Milestone3.Data;
 using s4587831Milestone3.Data.Services;
+using s4587831Milestone3.Data.Static;
 using s4587831Milestone3.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace s4587831Milestone3.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     public class ConvenorsController : Controller
     {
         private readonly IConvenorsService _service;
@@ -19,6 +22,7 @@ namespace s4587831Milestone3.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var allConvenors = await _service.GetAllAsync();
@@ -26,6 +30,7 @@ namespace s4587831Milestone3.Controllers
         }
 
         //GET: convenors/details/1
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var convenorDetails = await _service.GetByIdAsync(id);
